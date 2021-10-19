@@ -1,5 +1,6 @@
 package com.hall;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -7,15 +8,34 @@ import java.util.Scanner;
 public class Main {
     static ArrayList<String> listOfBooks;
     static ArrayList<String> listofComics;
-    static ArrayList<Integer> listofNewspaperDates;
 
+    public static void main(String[] args) throws SQLException {
+        //Class.forName("com.mysql.cj.jdbc.Driver");
+        String url = "jdbc:mysql://localhost:3306/librarydb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+        String username = "root";
+        String password = "Crawford98!";
 
-    public static void main(String[] args) {
+        Connection con = DriverManager.getConnection(url, username, password);
+        if (con != null) {
+            System.out.println("Database Connected successfully");
+        } else {
+            System.out.println("Database Connection failed");
+        }
+/*
+        String sql = "INSERT INTO book (bookname, authorname, bookrefnumber) VALUES (?, ?, ?)";
+        PreparedStatement statement = con.prepareStatement(sql);
+        statement.setString(1,"Hitchhikers Guide to the Galaxy");
+        statement.setString(2,"Douglas Adams");
+        statement.setInt(3,9);
+
+        statement.executeUpdate();
+
+        statement.close();
+        con.close();
+*/
         listOfBooks = new ArrayList<>();
         listofComics = new ArrayList<>();
-        listofNewspaperDates = new ArrayList<>();
         Scanner key = new Scanner(System.in);
-
 
         for (; true; ) {
             System.out.println("To access the Book library, enter 1. To access the Comics library, enter 2.");
@@ -23,10 +43,7 @@ public class Main {
             switch (decide) {
                 case 1 -> bookLibrary();
                 case 2 -> comicLibrary();
-                default -> System.out.println("Come on man, there were only 2 choices.");
             }
-            //System.out.println("The current list of books is: " + listOfBooks);
-
         }
     }
 
@@ -44,7 +61,6 @@ public class Main {
                 case 3 -> {
                     return;
                 }
-                default -> System.out.println("Not that difficult bud.");
             }
         }
 
@@ -73,7 +89,6 @@ public class Main {
         }
     }
 
-
     public static void addComic() {
         Scanner word = new Scanner(System.in);
         Comic comic = new Comic();
@@ -98,7 +113,6 @@ public class Main {
         listofComics.remove(remove.nextLine());
     }
 
-
     public static void removeBook() {
         Scanner remove = new Scanner(System.in);
         System.out.println("The current available books are: " + listOfBooks);
@@ -121,6 +135,5 @@ public class Main {
             listOfBooks.add(book.getBookTitle());
             bookNumber--;
         }
-        //System.out.println("The current list of books is:" + listOfBooks);
     }
 }
